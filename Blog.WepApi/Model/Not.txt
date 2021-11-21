@@ -1,0 +1,3 @@
+﻿Model klasörü;
+	Databasede bulunan tabloların karşılıkları olarak class olarak tutulan klasördür. 
+	Örneğin User tablosu için User classı. İçerisinde fieldlar aynı olmalı(Id,Usernam vs).
