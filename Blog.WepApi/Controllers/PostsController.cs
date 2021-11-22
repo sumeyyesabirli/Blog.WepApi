@@ -33,16 +33,16 @@ namespace Blog.WepApi.Controllers
 
         // GET: api/Posts/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Post>> GetPosts(int id)
+        public async Task<IActionResult> GetPostDetail(int id)
         {
             var posts = await _context.Post.FindAsync(id);
-
+            var mappingPost =await MapPostModel(new List<Post> { posts });
             if (posts == null)
             {
                 return NotFound();
             }
 
-            return posts;
+            return Ok(mappingPost.FirstOrDefault());
         }
 
         // PUT: api/Posts/5
@@ -81,6 +81,7 @@ namespace Blog.WepApi.Controllers
         [HttpPost]
         public async Task<ActionResult<Post>> PostPosts(Post posts)
         {
+            posts.Date = DateTime.Now;
             _context.Post.Add(posts);
             await _context.SaveChangesAsync();
 
