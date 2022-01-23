@@ -114,12 +114,34 @@ namespace Blog.WepApi.Controllers
         public async Task<IActionResult> GetLastTreePosts()
         {
             var posts = await _context.Post.ToListAsync();
-            posts = posts.OrderByDescending(x => x.Id).Take(3).ToList();
+            posts = posts.OrderByDescending(x => x.Id).ToList();
             var returnData = await MapPostModel(posts);
             return Ok(returnData);
         }
 
+        [HttpGet("get-random-posts")]
+        //Ana sayfa için son 3 post
+        public async Task<IActionResult> GetPopulerTreePosts()
+        {
+            var posts = await _context.Post.ToListAsync();
+            var postsCount = posts.Count;
+            List<Post> treePost = new List<Post>();
+            for(int i = 0; i < 3; i++)
+            {
+                Random r = new Random();
+                var indx = r.Next(0, postsCount);
+                if(!treePost.Any(x=> x.Id == posts[indx].Id))
+                 treePost.Add(posts[indx]);
+                else
+                {
+                    i--;
+                }
 
+            }
+
+            var returnData = await MapPostModel(treePost);
+            return Ok(returnData);
+        }
 
         //Maplama işlemi
         private async Task<List<PostModel>> MapPostModel(List<Post> posts)
